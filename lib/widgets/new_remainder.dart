@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_duration_picker/flutter_duration_picker.dart';
-import 'package:flutterandpython/Constans.dart' as constants;
 import 'package:flutterandpython/functions/helper_functions.dart';
 // import 'package:intl/intl.dart';
 
@@ -76,7 +75,7 @@ class _NewRemainderState extends State<NewRemainder> {
       setState(() {
         _selectedTime = pickedTime;
       });
-    });
+    return;});
     print('selected time: ' + _selectedTime.toString());
     Scaffold.of(context).showSnackBar(new SnackBar(
       content: new Text("הזמן הנבחר: $resultingDuration")

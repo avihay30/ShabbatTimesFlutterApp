@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterandpython/models/remainder.dart';
 import 'package:flutterandpython/widgets/remainder_item.dart';
@@ -26,7 +25,7 @@ class RemaindersList extends StatelessWidget {
               children: <Widget>[
                 Text(
                   '!לא הוספת עדיין תזכורות לשבת',
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(
                   height: 20,

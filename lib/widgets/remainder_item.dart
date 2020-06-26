@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutterandpython/functions/helper_functions.dart';
 import 'package:flutterandpython/models/remainder.dart';
 import 'package:flutterandpython/globals.dart' as globals;
+import 'package:flutterandpython/widgets/background_item_options.dart';
 
 class RemainderItem extends StatefulWidget {
   const RemainderItem({
@@ -32,35 +32,18 @@ class _RemainderItemState extends State<RemainderItem>
   // Color color;
   ImageFilter imageFilter;
   double slideAmount;
-  Color _bgColor;
-
-  static AnimationController controller;
-
-  // void setupAnimation() {
-  //   controller = AnimationController(
-  //     duration: const Duration(seconds: 1),
-  //     vsync: this,
-  //   );
-
-  //   controller.forward();
-  // }
+  // Color _bgColor;
 
   @override
   void initState() {
-    const availableColors = [
-      Colors.red,
-      Colors.black,
-      Colors.blue,
-      Colors.purple,
-    ];
+    // const availableColors = [
+    //   Colors.red,
+    //   Colors.black,
+    //   Colors.blue,
+    //   Colors.purple,
+    // ];
 
-    _bgColor = availableColors[Random().nextInt(4)];
-    // controller = AnimationController(
-    //   duration: const Duration(seconds: 1),
-    //   vsync: this,
-    // );
-
-    // controller.forward();
+    // _bgColor = availableColors[Random().nextInt(4)];
     super.initState();
   }
 
@@ -126,43 +109,6 @@ class _RemainderItemState extends State<RemainderItem>
                 child: Container(color: Colors.black.withOpacity(0)))));
   }
 
-  Widget backgroundOptions() {
-    Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      height: size.height / 8.5,
-      width: size.width / 9,
-      child:
-      Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0),
-        color: Colors.amberAccent,
-      ),
-      margin: EdgeInsets.only(left: size.width / 70, top: size.height / 170),
-      child: ClipRRect(
-      // borderRadius: BorderRadius.circular(20.0),
-      child: 
-      Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-        Expanded(child: Container(
-          // color: Colors.blue,
-          child: 
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.edit),
-          splashColor: Colors.grey,
-        ))),
-                Expanded(child: Container(
-          // color: Colors.green,
-          child: 
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.alarm_off),
-        ),))
-      ]),
-    )));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -185,12 +131,12 @@ class _RemainderItemState extends State<RemainderItem>
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Stack(children: <Widget>[
-              backgroundOptions(),
+              BackgrounItemOptions(),
               AnimatedContainer(
                 duration: Duration(seconds: 1),
                 curve: Curves.fastLinearToSlowEaseIn,
                 transform: isSelected
-                    ? Matrix4.translationValues(slideAmount, 0, 0)
+                    ? Matrix4.translationValues(globals.sliderAmount, 0, 0)
                     : Matrix4.translationValues(0, 0, 0),
                 child: Stack(children: <Widget>[
                   remainderCard(),
@@ -198,6 +144,14 @@ class _RemainderItemState extends State<RemainderItem>
                 ]),
               )
             ])));
+  }
+
+  void setSlideAmount() {
+    final size = MediaQuery.of(context).size;
+    if (globals.remaindersIdsToDelete.length < 1) {
+      globals.sliderAmount = size.width / 8;
+    } else
+      globals.sliderAmount = 0.0;
   }
 
   void continueSelection() {
@@ -208,12 +162,11 @@ class _RemainderItemState extends State<RemainderItem>
   }
 
   void toggleSelection() {
-    final size = MediaQuery.of(context).size;
     setState(() {
+      setSlideAmount();
       if (isSelected) {
         // subtracking items from selection
         imageFilter = null;
-        slideAmount = 0.0;
         isSelected = false;
         globals.remaindersIdsToDelete.remove(widget.remainder.id);
         print("this is after sub " + globals.remaindersIdsToDelete.toString());
@@ -221,7 +174,6 @@ class _RemainderItemState extends State<RemainderItem>
       } else {
         // adding items to selection
         imageFilter = ImageFilter.blur(sigmaX: 1, sigmaY: 1);
-        slideAmount = size.width / 8;
         isSelected = true;
         globals.remaindersIdsToDelete.add(widget.remainder.id);
         print("this is after add " + globals.remaindersIdsToDelete.toString());

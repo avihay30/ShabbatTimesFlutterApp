@@ -9,3 +9,4 @@ bool noCityChosen = true;
 Color borderOfCityChosenColor = Colors.blueAccent;
 bool isShabbatTimesVisable = false;
 List<String> remaindersIdsToDelete = [];
+double sliderAmount = 0.0;
