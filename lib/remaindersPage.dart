@@ -17,7 +17,7 @@ class RemaindersPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
-  final List<Remainder> _userRemainders = [];
+  // final List<Remainder> _userRemainders = [];
   String url;
   var data;
   var queryText = 'Quary';
@@ -42,7 +42,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
 
   void _deleteRemainder(String id) {
     setState(() {
-      _userRemainders.removeWhere((remainder) => remainder.id == id);
+      globals.userRemainders.removeWhere((remainder) => remainder.id == id);
     });
   }
 
@@ -83,7 +83,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
     );
 
     setState(() {
-      _userRemainders.add(newRemainder);
+      globals.userRemainders.add(newRemainder);
     });
   }
 
@@ -98,7 +98,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
             builder: (context) {
               return GestureDetector(
                 onTap: () {},
-                child: NewRemainder(_addNewRemainder),
+                child: NewRemainder(addRemainder: _addNewRemainder),
                 behavior: HitTestBehavior.opaque,
               );
             },
@@ -160,7 +160,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
               appBar.preferredSize.height -
               mediaQuery.padding.top) *
           0.7,
-      child: RemaindersList(_userRemainders, _deleteRemainder,
+      child: RemaindersList(globals.userRemainders, _deleteRemainder,
           _deleteRemainders, _setRemaindersState),
     );
     final pageBody = SafeArea(

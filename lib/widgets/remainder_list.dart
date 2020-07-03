@@ -13,7 +13,7 @@ class RemaindersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build() TransactionList');
+    print('build() RemaindersList');
 
     var mediaQuery = MediaQuery.of(context);
     final double itemHeight =

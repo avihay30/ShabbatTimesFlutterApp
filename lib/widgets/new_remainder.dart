@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 import 'package:flutterandpython/functions/helper_functions.dart';
-// import 'package:intl/intl.dart';
+import 'package:flutterandpython/models/remainder.dart';
 
 import '../widgets/adaptive_flat_button.dart';
 
 class NewRemainder extends StatefulWidget {
-  final Function addRemainder;
+  const NewRemainder({
+    Key key,
+    @required this.addRemainder, this.remainderToEdit}) : super(key: key);
 
-  NewRemainder(this.addRemainder) {
-    print('Constructor NewRemainder Widget');
-  }
+  final Remainder remainderToEdit;
+  final Function addRemainder;
 
   @override
   _NewRemainderState createState() {
@@ -19,9 +20,8 @@ class NewRemainder extends StatefulWidget {
     return _NewRemainderState();
   }
 }
-
 class _NewRemainderState extends State<NewRemainder> {
-  final _titleController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
   Duration _selectedTime;
 
   _NewRemainderState() {
@@ -31,6 +31,7 @@ class _NewRemainderState extends State<NewRemainder> {
   @override
   void initState() {
     print('initState()');
+    _setCardValuesByRemainderToEdit();
     super.initState();
   }
 
@@ -52,7 +53,6 @@ class _NewRemainderState extends State<NewRemainder> {
     if (enteredTitle.isEmpty || _selectedTime == null) {
       return;
     }
-
     widget.addRemainder(
       enteredTitle,
       _selectedTime,
@@ -60,6 +60,13 @@ class _NewRemainderState extends State<NewRemainder> {
 
     Navigator.of(context).pop();
   }
+
+  void _setCardValuesByRemainderToEdit() {
+  if(widget.remainderToEdit != null) {
+    _titleController.text = widget.remainderToEdit.title;
+    _selectedTime = widget.remainderToEdit.durationTime;
+  }
+}
 
   void _durationTimePicker() async {
     Duration resultingDuration = await showDurationPicker(
@@ -76,24 +83,9 @@ class _NewRemainderState extends State<NewRemainder> {
         _selectedTime = pickedTime;
       });
     return;});
-    print('selected time: ' + _selectedTime.toString());
     Scaffold.of(context).showSnackBar(new SnackBar(
-      content: new Text("הזמן הנבחר: $resultingDuration")
-      ));
+      content: new Text("הזמן הנבחר: $resultingDuration")));
   }
-
-//   // Function to call future
-// void runDurationTimePicker() {
-//   _durationTimePicker()
-//   .then((pickedTime) {
-//       if (pickedTime == null) {
-//         return;
-//       }
-//       setState(() {
-//         _selectedTime = pickedTime;
-//       });
-//     });
-// }
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +105,9 @@ class _NewRemainderState extends State<NewRemainder> {
               TextField(
                 decoration: InputDecoration(labelText: 'שם התזכורת'),
                 controller: _titleController,
-                onSubmitted: (_) => _submitData(),
+                onSubmitted: (_) => _submitData,
                 // onChanged: (val) {
-                //   titleInput = val;
+                //   _titleController.text = val;
                 // },
               ),
               // TextField(

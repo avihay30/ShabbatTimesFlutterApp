@@ -111,6 +111,7 @@ class _RemainderItemState extends State<RemainderItem>
 
   @override
   Widget build(BuildContext context) {
+    print('build() item in title: ' + widget.remainder.title);
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
@@ -131,7 +132,7 @@ class _RemainderItemState extends State<RemainderItem>
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Stack(children: <Widget>[
-              BackgrounItemOptions(),
+              BackgrounItemOptions(remainder: widget.remainder),
               AnimatedContainer(
                 duration: Duration(seconds: 1),
                 curve: Curves.fastLinearToSlowEaseIn,
