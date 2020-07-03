@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterandpython/functions/helper_functions.dart';
-import 'package:flutterandpython/models/remainder.dart';
 import 'package:flutterandpython/globals.dart' as globals;
+import 'package:flutterandpython/models/remainder.dart';
 import 'package:flutterandpython/widgets/background_item_options.dart';
 
 class RemainderItem extends StatefulWidget {
@@ -132,7 +132,9 @@ class _RemainderItemState extends State<RemainderItem>
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Stack(children: <Widget>[
-              BackgrounItemOptions(remainder: widget.remainder),
+              BackgrounItemOptions(
+                  remainder: widget.remainder,
+                  setRemaindersState: widget.setRemaindersState),
               AnimatedContainer(
                 duration: Duration(seconds: 1),
                 curve: Curves.fastLinearToSlowEaseIn,

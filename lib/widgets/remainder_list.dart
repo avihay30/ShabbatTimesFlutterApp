@@ -40,20 +40,20 @@ class RemaindersList extends StatelessWidget {
             );
           })
         : LimitedBox(
-      maxWidth: 2,
-      maxHeight: 88,
-      child: GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: (itemWidth / itemHeight),
-            children: remainders
-                .map((remainder) => RemainderItem(
-                      key: ValueKey(remainder.id),
-                      remainder: remainder,
-                      deleteRemainder: deleteRemainder,
-                      deleteRemainders: deleteRemainders,
-                      setRemaindersState: setRemaindersState,
-                    ))
-                .toList(),
-        ));
+            maxWidth: 2,
+            maxHeight: 88,
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: (itemWidth / itemHeight),
+              children: remainders
+                  .map((remainder) => RemainderItem(
+                        key: ValueKey(remainder.id),
+                        remainder: remainder,
+                        deleteRemainder: deleteRemainder,
+                        deleteRemainders: deleteRemainders,
+                        setRemaindersState: setRemaindersState,
+                      ))
+                  .toList(),
+            ));
   }
 }

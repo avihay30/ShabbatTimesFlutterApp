@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutterandpython/remaindersPage.dart';
 
@@ -6,16 +5,16 @@ void main() {
   const String _title = 'שבתזכורת';
 
   runApp(MaterialApp(
-    title: _title,
-    // Start the app with the "/" named route. In this case, the app starts
-    // on the FirstScreen widget.
+      title: _title,
+      // Start the app with the "/" named route. In this case, the app starts
+      // on the FirstScreen widget.
 
-    initialRoute: '/remaindersPage',
-    routes: {
-      '/remaindersPage': (context) => RemaindersPage()
-    //   '/chooseCityPage': (context) => ChooseCityPage(),
-    // },
-    }));
+      initialRoute: '/remaindersPage',
+      routes: {
+        '/remaindersPage': (context) => RemaindersPage()
+        //   '/chooseCityPage': (context) => ChooseCityPage(),
+        // },
+      }));
 }
 
 // /// This Widget is the main application widget.

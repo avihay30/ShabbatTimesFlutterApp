@@ -49,7 +49,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
   void _deleteRemainders(List<String> ids) {
     ids.forEach((remainderId) {
       _deleteRemainder(remainderId);
-    globals.remaindersIdsToDelete = [];
+      globals.remaindersIdsToDelete = [];
     });
   }
 
@@ -77,10 +77,11 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
 
   void _addNewRemainder(String remainderTitle, Duration chosenTime) {
     final newRemainder = Remainder(
-      title: remainderTitle,
-      durationTime: chosenTime,
-      id: DateTime.now().toString(),
-    );
+        title: remainderTitle,
+        durationTime: chosenTime,
+        id: DateTime.now().toString(),
+        isTaskDone: false,
+        isAlarmOn: true);
 
     setState(() {
       globals.userRemainders.add(newRemainder);
@@ -114,7 +115,7 @@ class _MyAppState extends State<RemaindersPage> with TickerProviderStateMixin {
             _deleteRemainders(globals.remaindersIdsToDelete);
             // setState(() {
             // });
-            });
+          });
     }
     return FloatingActionButton(
       child: Icon(Icons.add),

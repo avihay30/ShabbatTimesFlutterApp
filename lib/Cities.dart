@@ -1,3 +1,1 @@
-enum Cities {
-  Jerusalem, TelAviv, Haifa, BeerSheva, None
-}
+enum Cities { Jerusalem, TelAviv, Haifa, BeerSheva, None }

@@ -23,6 +23,7 @@ class NewRemainder extends StatefulWidget {
 class _NewRemainderState extends State<NewRemainder> {
   TextEditingController _titleController = TextEditingController();
   Duration _selectedTime;
+  String _submitButtonText = "הוסף תזכורת";
 
   _NewRemainderState() {
     print('Constructor NewRemainder State');
@@ -65,6 +66,7 @@ class _NewRemainderState extends State<NewRemainder> {
   if(widget.remainderToEdit != null) {
     _titleController.text = widget.remainderToEdit.title;
     _selectedTime = widget.remainderToEdit.durationTime;
+    _submitButtonText = "עדכן תזכורת";
   }
 }
 
@@ -133,7 +135,7 @@ class _NewRemainderState extends State<NewRemainder> {
                 ),
               ),
               RaisedButton(
-                child: Text('הוסף תזכורת'),
+                child: Text(_submitButtonText),
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).textTheme.button.color,
                 onPressed: _submitData,

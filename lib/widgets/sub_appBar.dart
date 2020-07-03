@@ -22,8 +22,8 @@ class SubAppBarState extends State<SubAppBar> with TickerProviderStateMixin {
     return Stack(children: <Widget>[
       Row(children: <Widget>[
         Expanded(
-          child: shabbatTimeTabShow("<start_time>", size, MainAxisAlignment.start,
-              globals.isShabbatTimesVisable),
+          child: shabbatTimeTabShow("<start_time>", size,
+              MainAxisAlignment.start, globals.isShabbatTimesVisable),
         ),
         Expanded(
           child: shabbatTimeTabShow("<stop_time>", size, MainAxisAlignment.end,
