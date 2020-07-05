@@ -1,7 +1,10 @@
+import 'dart:ffi';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutterandpython/functions/helper_functions.dart';
 import 'package:flutterandpython/globals.dart' as globals;
 import 'package:flutterandpython/models/remainder.dart';
@@ -31,23 +34,50 @@ class _RemainderItemState extends State<RemainderItem>
   var mycolor = Colors.white;
   // Color color;
   ImageFilter imageFilter;
+  Color remainderDoneColor;
+  Decoration boxBorderWhileBlur;
   double slideAmount;
-  // Color _bgColor;
+  Color _bgColor;
+
+  bool value = false;
+  Function onChanged;
 
   @override
   void initState() {
-    // const availableColors = [
-    //   Colors.red,
-    //   Colors.black,
-    //   Colors.blue,
-    //   Colors.purple,
-    // ];
+    const availableColors = [
+      Colors.red,
+      Colors.black,
+      Colors.blue,
+      Colors.purple,
+    ];
 
-    // _bgColor = availableColors[Random().nextInt(4)];
+    _bgColor = availableColors[Random().nextInt(4)];
     super.initState();
   }
 
+  void _editIsTaskDoneRemainder() {
+    bool _isTaskDone = widget.remainder.isTaskDone;
+    _isTaskDone = !_isTaskDone;
+    final newRemainder = Remainder(
+        title: widget.remainder.title,
+        durationTime: widget.remainder.durationTime,
+        id: widget.remainder.id,
+        isTaskDone: _isTaskDone,
+        isAlarmOn: widget.remainder.isAlarmOn);
+    editRemainderValues(widget.remainder, newRemainder);
+    widget.setRemaindersState();
+  }
+
+  void _setRemainderColorIfTaskIsDone(bool isSelected) {
+    setState(() {
+      isSelected
+          ? remainderDoneColor = Colors.grey[300].withOpacity(0.35)
+          : remainderDoneColor = Colors.transparent;
+    });
+  }
+
   Widget remainderCard() {
+    // TODO: add icon for done/undone remainder
     return Positioned.fill(
         child: Card(
       shape: RoundedRectangleBorder(
@@ -57,13 +87,18 @@ class _RemainderItemState extends State<RemainderItem>
       elevation: 5,
       margin: EdgeInsets.symmetric(),
       child: ListTile(
-        // leading: CircleAvatar(
+        // trailing:
+        // Checkbox(
+        //     value: value,
+        //     onChanged: (bool newValue) {
+        //       value = newValue;
+        //     }),
         //   backgroundColor: _bgColor,
-        //   radius: 30,
+        //   radius: 15,
         //   child: Padding(
-        //     padding: const EdgeInsets.all(6),
+        //     padding: const EdgeInsets.all(0),
         //     child: FittedBox(
-        //       child: Text('\$${widget.remainder.amount}'),
+        //       child: Text('\$${widget.remainder.isTaskDone}'),
         //     ),
         //   ),
         // ),
@@ -97,21 +132,65 @@ class _RemainderItemState extends State<RemainderItem>
   }
 
   Widget creatingBlurOnSelction() {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
-        child: BackdropFilter(
-            filter: imageFilter == null
-                ? ImageFilter.blur(sigmaX: 0, sigmaY: 0)
-                : imageFilter,
-            child: GestureDetector(
-                onTap: continueSelection,
-                onLongPress: toggleSelection,
-                child: Container(color: Colors.black.withOpacity(0)))));
+    final size = MediaQuery.of(context).size;
+    return Stack(children: <Widget>[
+      ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: BackdropFilter(
+              filter: imageFilter == null
+                  ? ImageFilter.blur(sigmaX: 0, sigmaY: 0)
+                  : imageFilter,
+              child: GestureDetector(
+                  onTap: continueSelection,
+                  onLongPress: toggleSelection,
+                  child: Container(decoration: boxBorderWhileBlur
+                      // color: Colors.black.withOpacity(0)
+                      )))),
+      ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+              child: GestureDetector(
+                  onTap: continueSelection,
+                  onLongPress: toggleSelection,
+                  child: Container(color: remainderDoneColor)))),
+      Positioned(
+          top: size.height / 140,
+          left: size.width / 80,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: SizedBox(
+                height: Checkbox.width * 1.3,
+                width: Checkbox.width * 1.3,
+                child: Container(
+                    decoration: new BoxDecoration(
+                      border: Border.all(
+                        width: 1.8,
+                      ),
+                      borderRadius: new BorderRadius.circular(20),
+                      color: Colors.amberAccent.withOpacity(0.7),
+                    ),
+                    child: new Transform.scale(
+                        scale: 1.3,
+                        child: Checkbox(
+                          value: widget.remainder.isTaskDone,
+                          onChanged: (bool isSelected) {
+                            _editIsTaskDoneRemainder();
+                            _setRemainderColorIfTaskIsDone(isSelected);
+                          },
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                        ))),
+              )))
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     print('build() item in title: ' + widget.remainder.title);
+    print('this is title: ' +
+        widget.remainder.title +
+        ', is done? ' +
+        widget.remainder.isTaskDone.toString());
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
@@ -171,12 +250,16 @@ class _RemainderItemState extends State<RemainderItem>
         // subtracking items from selection
         imageFilter = null;
         isSelected = false;
+        boxBorderWhileBlur = null;
         globals.remaindersIdsToDelete.remove(widget.remainder.id);
         print("this is after sub " + globals.remaindersIdsToDelete.toString());
         widget.setRemaindersState();
       } else {
         // adding items to selection
         imageFilter = ImageFilter.blur(sigmaX: 1, sigmaY: 1);
+        boxBorderWhileBlur = BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.blueAccent, width: 1.3));
         isSelected = true;
         globals.remaindersIdsToDelete.add(widget.remainder.id);
         print("this is after add " + globals.remaindersIdsToDelete.toString());
